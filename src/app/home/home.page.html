@@ -1,13 +1,3 @@
-<ion-header [translucent]="true">
-  <ion-toolbar color="primary">
-    <ion-title>
-      TravelApp
-    </ion-title>
-    <ion-button color="light" class="ion-margin-end"
-                (click)="changeLang" slot="end">{{i18nService.getLanguage() ? 'RU' : 'EN'}}</ion-button>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
   <video class="video__main" loop="'loop'" [autoplay]="'autoplay'" [muted]="'muted'"
          src="./assets/video/attractions720.mp4"></video>
@@ -19,7 +9,8 @@
             {{travel.name}}
           </ion-card-header>
           <ion-card-content>
-            <ion-img [src]="travel.photos[0].data"></ion-img>
+            <ion-img [src]="travel.photos && travel.photos[0] && travel.photos[0].data ?
+            travel.photos[0].data : './assets/static/no-photo.jpg'"></ion-img>
           </ion-card-content>
         </ion-card>
       </ion-col>
@@ -27,7 +18,7 @@
         <ion-card (click)="createNewTravelItem()" button="true" class="ion-text-center ion-card">
           <ion-card-header color="success" class="ion-justify-content-center ion-align-items-center">
             <ion-icon class="add ion-margin-end" name="add-circle-outline"></ion-icon>
-            <span>Add new item</span>
+            <span>{{'HOME.ADD_NEW_ITEM' | translate}}</span>
           </ion-card-header>
           <ion-card-content>
             <ion-img src="./assets/static/temp-travel.jpg"></ion-img>
@@ -39,7 +30,7 @@
       <ion-col size="12">
         <ion-card *ngIf="!isClosedMap">
           <ion-card-header class="google-maps-header ion-align-items-center ion-justify-content-between" color="secondary">
-            Google maps
+            {{'HOME.GOOGLE_MAPS' | translate}}
             <ion-button class="close-map" size="small" *ngIf="!isClosedMap" color="danger" (click)="closeMap()">X</ion-button>
           </ion-card-header>
           <ion-card-content>

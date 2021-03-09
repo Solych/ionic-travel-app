@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
-
 import { Platform } from '@ionic/angular';
 import {Capacitor, Plugins} from '@capacitor/core';
-
 
 @Component({
   selector: 'app-root',

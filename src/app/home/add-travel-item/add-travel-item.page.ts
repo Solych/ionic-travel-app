@@ -1,4 +1,4 @@
-import {Component, ElementRef, NgZone, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import Photo from '../../shared/model/Photo';
 import {ActionSheetController, Platform, ToastController} from '@ionic/angular';
 import {HttpClient} from '@angular/common/http';
@@ -6,6 +6,8 @@ import {CameraResultType, CameraSource, Capacitor, Plugins} from '@capacitor/cor
 import TravelsService from '../../core/service/TravelsService';
 import TravelItem from '../../shared/model/TravelItem';
 import {ActivatedRoute} from '@angular/router';
+import {TranslateService} from '@ngx-translate/core';
+import {take} from 'rxjs/operators';
 
 declare const window: any;
 const VK = window.VK;
@@ -16,7 +18,7 @@ const photoCode = 4;
   templateUrl: './add-travel-item.page.html',
   styleUrls: ['./add-travel-item.page.scss'],
 })
-export class AddTravelItemPage implements OnInit {
+export class AddTravelItemPage implements OnInit, OnDestroy {
   name: string;
   photos: Photo[] = [];
   date: string;
@@ -32,6 +34,7 @@ export class AddTravelItemPage implements OnInit {
               private httpClient: HttpClient,
               private travelsService: TravelsService,
               private toastController: ToastController,
+              private translateService: TranslateService,
               private platform: Platform,
               private activatedRoute: ActivatedRoute,
               private ngZone: NgZone) {
@@ -45,19 +48,30 @@ export class AddTravelItemPage implements OnInit {
         this.getTravelItem(data.id);
       }
     });
+
+    console.log(this.translateService.currentLang);
   }
 
-  addItem() {
+  ngOnDestroy(): void {
+    this.actionSheetController.dismiss()
+        .then(data => {})
+        .catch(err => {});
+  }
+
+  async addItem() {
     if (!this.date) {
-      this.toastMessage('Please, fill the date of a travel');
+      const msg = await this.translateService.get('ITEM.ERROR_MSG_DATE').pipe(take(1)).toPromise();
+      this.toastMessage(msg);
       return;
     } else if (!this.name) {
-      this.toastMessage('Please, fill the name of a travel');
+      const msg = await this.translateService.get('ITEM.ERROR_MSG_NAME').pipe(take(1)).toPromise();
+      this.toastMessage(msg);
       return;
     }
     const travelItem = new TravelItem(this.name, this.date, Math.floor(Math.random() * 10000), this.photos);
     this.travelsService.addTravelItem(travelItem);
-    this.toastMessage('New travel item was added!');
+    const successMsg = await this.translateService.get('ITEM.SUCCESS_ADD').pipe(take(1)).toPromise();
+    this.toastMessage(successMsg);
     this.clear();
   }
 
@@ -72,18 +86,18 @@ export class AddTravelItemPage implements OnInit {
     this.chosenImageIndex = index;
   }
 
-  openImagePicker() {
+  async openImagePicker() {
     if (this.isShow) {
       return;
     }
     const buttons = [{
-      text: 'From file system',
+      text: await this.translateService.get('IMAGE.FILE_SYSTEM').pipe(take(1)).toPromise(),
       icon: 'laptop-outline',
       handler: () => {
         this.filePicker.nativeElement.click();
       }
     }, {
-      text: 'From VK',
+      text: await this.translateService.get('IMAGE.VK').pipe(take(1)).toPromise(),
       icon: 'logo-vk',
       handler: () => {
         if (!this.vkAuthResponse) {
@@ -99,13 +113,13 @@ export class AddTravelItemPage implements OnInit {
         }
       }
     }, {
-      text: 'From Camera',
+      text: await this.translateService.get('IMAGE.CAMERA').pipe(take(1)).toPromise(),
       icon: 'camera-outline',
       handler: () => {
         this.getImagesFromCamera();
       }
     }, {
-      text: 'Cancel',
+      text: await this.translateService.get('IMAGE.CANCEL_BUTTON').pipe(take(1)).toPromise(),
       icon: 'close',
       role: 'cancel',
     }];
@@ -113,7 +127,7 @@ export class AddTravelItemPage implements OnInit {
       buttons.splice(2, 1);
     }
     this.actionSheetController.create({
-      header: 'Download pictures',
+      header: await this.translateService.get('ITEM.FIELD_PICTURES').pipe(take(1)).toPromise(),
       buttons: [...buttons]
     }).then(picker => picker.present());
   }
@@ -145,10 +159,10 @@ export class AddTravelItemPage implements OnInit {
     reader.readAsDataURL(files[index]);
   }
 
-  private getImagesFromCamera() {
+  private async getImagesFromCamera() {
     if (!Capacitor.isPluginAvailable('Camera')) {
       this.toastController.create({
-        message: 'Camera is not available',
+        message: await this.translateService.get('IMAGE.CAMERA_NOT_AVAILABLE').pipe(take(1)).toPromise(),
         duration: 4000
       }).then(toast => toast.present());
       return;
@@ -191,9 +205,9 @@ export class AddTravelItemPage implements OnInit {
         });
   }
 
-  private loginToast(firstName: string, lastName: string) {
+  private async loginToast(firstName: string, lastName: string) {
     this.toastController.create({
-      message: `You are logged as ${firstName} ${lastName}`,
+      message: await this.translateService.get('VK.LOGIN_SUCCESS', {firstName, lastName}).pipe(take(1)).toPromise(),
       duration: 4000
     }).then(toast => toast.present());
   }

@@ -1,0 +1,32 @@
+{
+  "HOME": {
+    "APP_NAME": "Путешествия",
+    "GOOGLE_MAPS": "Google карты",
+    "ADD_NEW_ITEM": "Добавить новое"
+  },
+  "ITEM": {
+    "FIELD_NAME": "Название (страна, город)",
+    "FIELD_DATE": "Дата путешествия",
+    "FIELD_PICTURES": "Добавить фотографии",
+    "ADD_BUTTON": "Добавить",
+    "CLEAR_BUTTON": "Очистить",
+    "ERROR_MSG_DATE": "Пожалуйста, заполните дату поездки",
+    "ERROR_MSG_NAME": "Пожалуйста, заполните название",
+    "SUCCESS_ADD": "Новое путешествие добавлено!"
+  },
+
+  "DATE": {
+    "CANCEL_BUTTON": "Отмена",
+    "DONE_BUTTON": "Готово"
+  },
+  "IMAGE": {
+    "FILE_SYSTEM": "С файловой системы",
+    "VK": "Из соц. сети ВК",
+    "CAMERA": "С камеры",
+    "CANCEL_BUTTON": "Отмена",
+    "CAMERA_NOT_AVAILABLE": "Камера не доступна"
+  },
+  "VK": {
+    "LOGIN_SUCCESS": "Вы вошли как {{firstName}} {{lastName}}"
+  }
+}

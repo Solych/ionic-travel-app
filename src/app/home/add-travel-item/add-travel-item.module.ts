@@ -9,6 +9,7 @@ import { AddTravelItemPageRoutingModule } from './add-travel-item-routing.module
 import { AddTravelItemPage } from './add-travel-item.page';
 import { SharedModule } from '../../shared/shared.module';
 import {HttpClientModule} from '@angular/common/http';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -17,8 +18,9 @@ import {HttpClientModule} from '@angular/common/http';
     IonicModule,
     ReactiveFormsModule,
     AddTravelItemPageRoutingModule,
+    TranslateModule,
     SharedModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   declarations: [AddTravelItemPage]
 })

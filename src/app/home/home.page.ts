@@ -3,7 +3,7 @@ import TravelItem from '../shared/model/TravelItem';
 import TravelsService from '../core/service/TravelsService';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Loader} from '@googlemaps/js-api-loader';
-import {I18nService} from '../core/service/I18nService';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-home',
@@ -16,13 +16,15 @@ export class HomePage implements OnInit, OnDestroy {
   isClosedMap = true;
   constructor(private travelsService: TravelsService,
               private router: Router,
-              private activatedRoute: ActivatedRoute,
-              private i18nService: I18nService) {}
+              private translateService: TranslateService,
+              private activatedRoute: ActivatedRoute) {}
 
   ngOnInit() {
     this.travelsService.getTravelsItems().subscribe(travels => {
       this.travels = travels;
     });
+
+    this.translateService.use('en');
   }
 
   ngOnDestroy(): void {
@@ -37,6 +39,10 @@ export class HomePage implements OnInit, OnDestroy {
     this.router.navigate(['add'], {relativeTo: this.activatedRoute});
   }
 
+  changeLang() {
+    this.translateService.use(this.translateService.currentLang === 'en' ? 'ru' : 'en');
+  }
+
   closeMap() {
     this.isClosedMap = true;
   }
@@ -48,7 +54,7 @@ export class HomePage implements OnInit, OnDestroy {
       const loader = new Loader({
         apiKey: this.key,
         version: 'weekly',
-        language: 'EN',
+        language: this.translateService.currentLang.toUpperCase(),
         libraries: ['places'],
       });
       loader.load().then(() => {

@@ -1,0 +1,32 @@
+{
+  "HOME": {
+    "APP_NAME": "TravelApp",
+    "GOOGLE_MAPS": "Google maps",
+    "ADD_NEW_ITEM": "Add new item"
+  },
+  "ITEM": {
+    "FIELD_NAME": "Name (country, city)",
+    "FIELD_DATE": "Select date of travel",
+    "FIELD_PICTURES": "Download pictures",
+    "ADD_BUTTON": "Add",
+    "CLEAR_BUTTON": "Clear",
+    "ERROR_MSG_DATE": "Please, fill the date of a travel",
+    "ERROR_MSG_NAME": "Please, fill the name of a travel",
+    "SUCCESS_ADD": "New travel item was added!"
+  },
+
+  "DATE": {
+    "CANCEL_BUTTON": "Cancel",
+    "DONE_BUTTON": "Done"
+  },
+  "IMAGE": {
+    "FILE_SYSTEM": "From file system",
+    "VK": "From VK",
+    "CAMERA": "From Camera",
+    "CANCEL_BUTTON": "Cancel",
+    "CAMERA_NOT_AVAILABLE": "Camera is not available"
+  },
+  "VK": {
+    "LOGIN_SUCCESS": "You are logged as {{firstName}} {{lastName}}"
+  }
+}
