@@ -1,20 +1,52 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>
-      Blank
+      TravelApp
     </ion-title>
+    <ion-button color="light" class="ion-margin-end"
+                (click)="changeLang" slot="end">{{i18nService.getLanguage() ? 'RU' : 'EN'}}</ion-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+  <video class="video__main" loop="'loop'" [autoplay]="'autoplay'" [muted]="'muted'"
+         src="./assets/video/attractions720.mp4"></video>
+  <ion-grid>
+    <ion-row>
+      <ion-col *ngFor="let travel of travels" sizeXs="12" sizeLg="4">
+        <ion-card (click)="showDetails(travel)" button="true">
+          <ion-card-header (click)="showGoogleMaps(travel, $event)" color="secondary">
+            {{travel.name}}
+          </ion-card-header>
+          <ion-card-content>
+            <ion-img [src]="travel.photos[0].data"></ion-img>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col sizeLg="4">
+        <ion-card (click)="createNewTravelItem()" button="true" class="ion-text-center ion-card">
+          <ion-card-header color="success" class="ion-justify-content-center ion-align-items-center">
+            <ion-icon class="add ion-margin-end" name="add-circle-outline"></ion-icon>
+            <span>Add new item</span>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-img src="./assets/static/temp-travel.jpg"></ion-img>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-card *ngIf="!isClosedMap">
+          <ion-card-header class="google-maps-header ion-align-items-center ion-justify-content-between" color="secondary">
+            Google maps
+            <ion-button class="close-map" size="small" *ngIf="!isClosedMap" color="danger" (click)="closeMap()">X</ion-button>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="map" id="map"></div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

@@ -1,0 +1,5 @@
+<div class="controls ion-align-items-center ion-justify-content-between" *ngIf="data.length && data.length > 1">
+  <ion-icon color="primary" class="controls__button" (click)="previous()" name="arrow-back-outline"></ion-icon>
+  {{index + 1}} / {{data.length}}
+  <ion-icon color="primary" class="controls__button" (click)="next()" name="arrow-forward-outline"></ion-icon>
+</div>

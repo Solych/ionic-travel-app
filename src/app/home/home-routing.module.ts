@@ -6,6 +6,14 @@ const routes: Routes = [
   {
     path: '',
     component: HomePage,
+  },
+  {
+    path: 'add',
+    loadChildren: () => import('./add-travel-item/add-travel-item.module').then( m => m.AddTravelItemPageModule)
+  },
+  {
+    path: 'show/:id',
+    loadChildren: () => import('./add-travel-item/add-travel-item.module').then( m => m.AddTravelItemPageModule)
   }
 ];
 

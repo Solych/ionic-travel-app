@@ -1,0 +1,11 @@
+.controls {
+  margin: 16px auto;
+  width: 30rem;
+  max-width: 80%;
+  display: flex;
+}
+
+ion-icon.controls__button {
+  font-size: 32px;
+  cursor: pointer;
+}
