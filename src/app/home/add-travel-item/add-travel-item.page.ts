@@ -3,11 +3,15 @@ import Photo from '../../shared/model/Photo';
 import {ActionSheetController, Platform, ToastController} from '@ionic/angular';
 import {HttpClient} from '@angular/common/http';
 import {CameraResultType, CameraSource, Capacitor, Plugins} from '@capacitor/core';
-import TravelsService from '../../core/service/TravelsService';
 import TravelItem from '../../shared/model/TravelItem';
 import {ActivatedRoute} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {take} from 'rxjs/operators';
+import {AppState} from '../../store/state/app.state';
+import {Store} from '@ngrx/store';
+import {selectSelectedItem} from '../../store/travel-item.selector';
+import {AddTravelItem, SelectItem} from '../../store/travel-item.action';
+import {Subscription} from 'rxjs';
 
 declare const window: any;
 const VK = window.VK;
@@ -26,17 +30,18 @@ export class AddTravelItemPage implements OnInit, OnDestroy {
   chosenImageIndex = 0;
   isShow: boolean;
   vkAuthResponse: any;
-
+  selectedItem$ = this.store$.select(selectSelectedItem);
+  subscription: Subscription = new Subscription();
   @ViewChild('filePicker') filePicker: ElementRef<HTMLInputElement>;
 
 
   constructor(private actionSheetController: ActionSheetController,
               private httpClient: HttpClient,
-              private travelsService: TravelsService,
               private toastController: ToastController,
               private translateService: TranslateService,
               private platform: Platform,
               private activatedRoute: ActivatedRoute,
+              private store$: Store<AppState>,
               private ngZone: NgZone) {
   }
 
@@ -45,14 +50,19 @@ export class AddTravelItemPage implements OnInit, OnDestroy {
     this.isShow = false;
     this.activatedRoute.params.subscribe(data => {
       if (data && data.id) {
-        this.getTravelItem(data.id);
+        this.isShow = true;
       }
     });
-
-    console.log(this.translateService.currentLang);
+    this.subscription.add(this.selectedItem$.subscribe(travelItem => {
+      if (travelItem) {
+        this.fillForm(travelItem);
+      }
+    }));
   }
 
   ngOnDestroy(): void {
+    this.store$.dispatch(new SelectItem(null));
+    this.subscription.unsubscribe();
     this.actionSheetController.dismiss()
         .then(data => {})
         .catch(err => {});
@@ -69,7 +79,7 @@ export class AddTravelItemPage implements OnInit, OnDestroy {
       return;
     }
     const travelItem = new TravelItem(this.name, this.date, Math.floor(Math.random() * 10000), this.photos);
-    this.travelsService.addTravelItem(travelItem);
+    this.store$.dispatch(new AddTravelItem(travelItem));
     const successMsg = await this.translateService.get('ITEM.SUCCESS_ADD').pipe(take(1)).toPromise();
     this.toastMessage(successMsg);
     this.clear();
@@ -241,16 +251,6 @@ export class AddTravelItemPage implements OnInit, OnDestroy {
     };
     img.setAttribute('crossOrigin', 'anonymous'); //
     img.src = src;
-  }
-
-  private getTravelItem(id: number) {
-    this.travelsService.getTravelsItems().subscribe(data => {
-      const item = data.find(travelItem => travelItem.id === +id);
-      if (item) {
-        this.fillForm(item);
-        this.isShow = true;
-      }
-    });
   }
 
   private fillForm(travelItem: TravelItem) {

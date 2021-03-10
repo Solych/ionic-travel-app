@@ -3,7 +3,7 @@
          src="./assets/video/attractions720.mp4"></video>
   <ion-grid>
     <ion-row>
-      <ion-col *ngFor="let travel of travels" sizeXs="12" sizeLg="4">
+      <ion-col *ngFor="let travel of items$ | async" sizeXs="12" sizeLg="4">
         <ion-card (click)="showDetails(travel)" button="true">
           <ion-card-header (click)="showGoogleMaps(travel, $event)" color="secondary">
             {{travel.name}}
